@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "university"
+version = "0.1.0"
+description = ""
+authors = ["Akmaljon701 <akmalkhanever@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+djangorestframework = "^3.15.2"
+drf-spectacular = "^0.27.2"
+python-decouple = "^3.8"
+drf-spectacular-sidecar = "^2024.7.1"
+django-cors-headers = "^4.4.0"
+pillow = "^10.4.0"
+django-cleanup = "^8.1.0"
+django-jazzmin = "^3.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
