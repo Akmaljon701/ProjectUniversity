@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework.views import APIView
 from api import serializers, models
 from rest_framework.response import Response
@@ -78,10 +79,19 @@ class EmployeesAPIView(APIView):
     @extend_schema(
         summary="Employees",
         request=None,
-        responses=serializers.EmployeesSerializer()
+        responses=serializers.EmployeesSerializer(),
+        parameters=[
+            OpenApiParameter(name='status', required=False, type=OpenApiTypes.STR,
+                             enum=[
+                                 'XODIM',
+                                 'TALABA',
+                                 'PROFESSOR'
+                             ]),
+        ]
     )
     def get(self, request):
-        employees = models.Employee.objects.all()
+        status = request.query_params.get('status')
+        employees = models.Employee.objects.filter(status=status).all()
         serializer = serializers.EmployeesSerializer(employees, many=True)
         return Response(serializer.data)
 

@@ -24,8 +24,8 @@ admin.site.register(models.New, NewsAdmin)
 
 
 class ManagementsAdmin(ModelAdmin):
-    list_display = ['id', 'title', 'description',]
-    list_display_links = ['title', 'description',]
+    list_display = ['id', 'title',]
+    list_display_links = ['title',]
     search_fields = ['title',]
 
 
