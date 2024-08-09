@@ -4,9 +4,9 @@
 # import requests
 # import socket
 #
-# BOT_TOKEN = '6825018776:AAEyD3vf7kQQSx2gsPvPRnqNsWvyk-u7VFQ'
-# USER_ID = 1592471406
-# TARGET_SERVER_HOSTNAME = ['vps02306.eskiz.uz']
+# BOT_TOKEN = ''
+# USER_ID =
+# TARGET_SERVER_HOSTNAME = []
 #
 #
 # class SendErrorToBotMiddleware:
