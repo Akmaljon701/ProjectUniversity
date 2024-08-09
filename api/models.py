@@ -26,7 +26,7 @@ class Message(models.Model):
 
 class New(models.Model):
     title = models.CharField(
-        max_length=100,
+        max_length=300,
         verbose_name="Sarlavha"
     )
     description = models.TextField(
