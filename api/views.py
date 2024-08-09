@@ -81,7 +81,7 @@ class EmployeesAPIView(APIView):
         request=None,
         responses=serializers.EmployeesSerializer(),
         parameters=[
-            OpenApiParameter(name='status', required=False, type=OpenApiTypes.STR,
+            OpenApiParameter(name='status', required=True, type=OpenApiTypes.STR,
                              enum=[
                                  'XODIM',
                                  'TALABA',
