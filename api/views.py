@@ -4,6 +4,7 @@ from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework.views import APIView
 from api import serializers, models
 from rest_framework.response import Response
+from utils.pagination import paginate, PaginationResponseSerializer
 
 
 class MessageAPIView(APIView):
@@ -25,12 +26,11 @@ class NewsAPIView(APIView):
     @extend_schema(
         summary="News",
         request=None,
-        responses=serializers.NewsSerializer()
+        responses=PaginationResponseSerializer(child_serializer_class=serializers.NewsSerializer)
     )
     def get(self, request):
         news = models.New.objects.all().order_by('-date')
-        serializer = serializers.NewsSerializer(news, many=True)
-        return Response(serializer.data)
+        return paginate(news, serializers.NewsSerializer, request)
 
 
 class NewAPIView(APIView):
@@ -52,26 +52,11 @@ class ManagementsAPIView(APIView):
     @extend_schema(
         summary="Managements",
         request=None,
-        responses=serializers.ManagementsSerializer()
+        responses=PaginationResponseSerializer(child_serializer_class=serializers.ManagementsSerializer)
     )
     def get(self, request):
         managements = models.Management.objects.all()
-        serializer = serializers.ManagementsSerializer(managements, many=True)
-        return Response(serializer.data)
-
-
-class ManagementAPIView(APIView):
-
-    @extend_schema(
-        summary="Management by id",
-        request=None,
-        responses=serializers.ManagementSerializer(),
-        operation_id='retrieve_management'
-    )
-    def get(self, request, management_id: int):
-        management = get_object_or_404(models.Management, id=management_id)
-        serializer = serializers.ManagementSerializer(management)
-        return Response(serializer.data)
+        return paginate(managements, serializers.ManagementsSerializer, request)
 
 
 class EmployeesAPIView(APIView):
@@ -79,7 +64,7 @@ class EmployeesAPIView(APIView):
     @extend_schema(
         summary="Employees",
         request=None,
-        responses=serializers.EmployeesSerializer(),
+        responses=PaginationResponseSerializer(child_serializer_class=serializers.EmployeesSerializer),
         parameters=[
             OpenApiParameter(name='status', required=True, type=OpenApiTypes.STR,
                              enum=[
@@ -92,7 +77,19 @@ class EmployeesAPIView(APIView):
     def get(self, request):
         status = request.query_params.get('status')
         employees = models.Employee.objects.filter(status=status).all()
-        serializer = serializers.EmployeesSerializer(employees, many=True)
-        return Response(serializer.data)
+        return paginate(employees, serializers.EmployeesSerializer, request)
 
+
+class EmployeeAPIView(APIView):
+
+    @extend_schema(
+        summary="Employee by id",
+        request=None,
+        responses=serializers.EmployeeSerializer(),
+        operation_id='retrieve_employee'
+    )
+    def get(self, request, employee_id: int):
+        employee = get_object_or_404(models.Employee, id=employee_id)
+        serializer = serializers.EmployeeSerializer(employee)
+        return Response(serializer.data)
 

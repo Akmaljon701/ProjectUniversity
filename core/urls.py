@@ -15,8 +15,7 @@ urlpatterns = [
     path('news/<int:new_id>/', views.NewAPIView.as_view()),
 
     path('managements/', views.ManagementsAPIView.as_view()),
-    path('managements/<int:management_id>/', views.ManagementAPIView.as_view()),
 
     path('employees/', views.EmployeesAPIView.as_view()),
-
+    path('employees/<int:employee_id>/', views.EmployeeAPIView.as_view()),
 ]

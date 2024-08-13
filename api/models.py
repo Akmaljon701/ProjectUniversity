@@ -80,6 +80,7 @@ class Employee(models.Model):
         upload_to='students/',
         verbose_name="Rasm"
     )
+    description = models.TextField(default='')
 
     class Meta:
         verbose_name_plural = "4.Xodimlar"

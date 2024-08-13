@@ -1,4 +1,5 @@
 from rest_framework.pagination import LimitOffsetPagination, CursorPagination
+from rest_framework import serializers
 
 
 class CustomOffSetPagination(LimitOffsetPagination):
@@ -29,3 +30,15 @@ def cursor_paginate(instances, serializator, request, **kwargs):
     serializer = serializator(paginated_order, many=True, **kwargs)
 
     return paginator.get_paginated_response(serializer.data)
+
+
+class PaginationResponseSerializer(serializers.Serializer):
+    count = serializers.IntegerField()
+    next = serializers.URLField(required=False, allow_null=True)
+    previous = serializers.URLField(required=False, allow_null=True)
+    results = serializers.ListSerializer(child=serializers.Serializer())
+
+    def __init__(self, *args, **kwargs):
+        self.child_serializer_class = kwargs.pop('child_serializer_class', serializers.Serializer)
+        super().__init__(*args, **kwargs)
+        self.fields['results'].child = self.child_serializer_class()
