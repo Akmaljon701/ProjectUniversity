@@ -4,7 +4,8 @@ from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework.views import APIView
 from api import serializers, models
 from rest_framework.response import Response
-from utils.pagination import paginate, PaginationResponseSerializer
+from utils.pagination import paginate, PaginationResponseSerializer, paginate_dynamic, \
+    PaginationDynamicResponseSerializer
 
 
 class MessageAPIView(APIView):
@@ -26,11 +27,17 @@ class NewsAPIView(APIView):
     @extend_schema(
         summary="News",
         request=None,
-        responses=PaginationResponseSerializer(child_serializer_class=serializers.NewsSerializer)
+        responses=PaginationDynamicResponseSerializer(child_serializer_class=serializers.NewsSerializer),
+        parameters=[
+            OpenApiParameter(name='page', required=True, type=OpenApiTypes.INT),
+            OpenApiParameter(name='limit', required=True, type=OpenApiTypes.INT),
+        ]
     )
     def get(self, request):
+        page = request.query_params.get('page')
+        limit = request.query_params.get('limit')
         news = models.New.objects.all().order_by('-date')
-        return paginate(news, serializers.NewsSerializer, request)
+        return paginate_dynamic(news, serializers.NewsSerializer, request, page, limit)
 
 
 class NewAPIView(APIView):
@@ -52,11 +59,17 @@ class ManagementsAPIView(APIView):
     @extend_schema(
         summary="Managements",
         request=None,
-        responses=PaginationResponseSerializer(child_serializer_class=serializers.ManagementsSerializer)
+        responses=PaginationDynamicResponseSerializer(child_serializer_class=serializers.ManagementsSerializer),
+        parameters=[
+            OpenApiParameter(name='page', required=True, type=OpenApiTypes.INT),
+            OpenApiParameter(name='limit', required=True, type=OpenApiTypes.INT),
+        ]
     )
     def get(self, request):
+        page = request.query_params.get('page')
+        limit = request.query_params.get('limit')
         managements = models.Management.objects.all()
-        return paginate(managements, serializers.ManagementsSerializer, request)
+        return paginate_dynamic(managements, serializers.ManagementsSerializer, request, page, limit)
 
 
 class EmployeesAPIView(APIView):
@@ -64,7 +77,7 @@ class EmployeesAPIView(APIView):
     @extend_schema(
         summary="Employees",
         request=None,
-        responses=PaginationResponseSerializer(child_serializer_class=serializers.EmployeesSerializer),
+        responses=PaginationDynamicResponseSerializer(child_serializer_class=serializers.EmployeesSerializer),
         parameters=[
             OpenApiParameter(name='status', required=True, type=OpenApiTypes.STR,
                              enum=[
@@ -72,12 +85,16 @@ class EmployeesAPIView(APIView):
                                  'TALABA',
                                  'PROFESSOR'
                              ]),
+            OpenApiParameter(name='page', required=True, type=OpenApiTypes.INT),
+            OpenApiParameter(name='limit', required=True, type=OpenApiTypes.INT),
         ]
     )
     def get(self, request):
+        page = request.query_params.get('page')
+        limit = request.query_params.get('limit')
         status = request.query_params.get('status')
         employees = models.Employee.objects.filter(status=status).all()
-        return paginate(employees, serializers.EmployeesSerializer, request)
+        return paginate_dynamic(employees, serializers.EmployeesSerializer, request, page, limit)
 
 
 class EmployeeAPIView(APIView):
@@ -92,4 +109,3 @@ class EmployeeAPIView(APIView):
         employee = get_object_or_404(models.Employee, id=employee_id)
         serializer = serializers.EmployeeSerializer(employee)
         return Response(serializer.data)
-
