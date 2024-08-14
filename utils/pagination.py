@@ -29,7 +29,8 @@ class CustomOffSetDynamicPagination(LimitOffsetPagination):
     def paginate_queryset(self, queryset, request, view=None):
         self.limit = self.get_limit(request)
         self.offset = (self.page - 1) * self.limit
-        return super().paginate_queryset(queryset, request, view)
+
+        return queryset[self.offset:self.offset + self.limit]
 
     def get_limit(self, request):
         limit = super().get_limit(request)
@@ -52,6 +53,9 @@ class CustomOffSetDynamicPagination(LimitOffsetPagination):
 
 def paginate_dynamic(instances, serializer_class, request, page=1, limit=25, **kwargs):
     paginator = CustomOffSetDynamicPagination(page=page, limit=limit)
+
+    paginator.count = instances.count()
+
     paginated_queryset = paginator.paginate_queryset(instances, request)
 
     serializer = serializer_class(paginated_queryset, many=True, **kwargs)
