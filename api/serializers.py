@@ -95,3 +95,37 @@ class EmployeeSerializer(ModelSerializer):
             'photo',
             'description',
         ]
+
+
+class EventsSerializer(ModelSerializer):
+    description = SerializerMethodField()
+
+    class Meta:
+        model = models.New
+        fields = [
+            'id',
+            'title',
+            'description',
+            'photo',
+            'date',
+        ]
+
+    @extend_schema_field(str)
+    def get_description(self, obj) -> Optional[str]:
+        description = obj.description
+        if len(description) > 30:
+            return description[:30] + '...'
+        return description
+
+
+class EventSerializer(ModelSerializer):
+
+    class Meta:
+        model = models.New
+        fields = [
+            'id',
+            'title',
+            'description',
+            'photo',
+            'date',
+        ]

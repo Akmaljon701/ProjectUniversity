@@ -51,3 +51,12 @@ class MessagesAdmin(ModelAdmin):
 
 
 admin.site.register(models.Message, MessagesAdmin)
+
+
+class EventAdmin(ModelAdmin):
+    list_display = ['id', 'title', 'date',]
+    list_display_links = ['title', 'date',]
+    search_fields = ['title',]
+
+
+admin.site.register(models.Event, EventAdmin)

@@ -18,4 +18,7 @@ urlpatterns = [
 
     path('employees/', views.EmployeesAPIView.as_view()),
     path('employees/<int:employee_id>/', views.EmployeeAPIView.as_view()),
+
+    path('events/', views.EventsAPIView.as_view()),
+    path('events/<int:event_id>/', views.EventAPIView.as_view()),
 ]

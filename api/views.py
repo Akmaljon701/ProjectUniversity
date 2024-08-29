@@ -109,3 +109,35 @@ class EmployeeAPIView(APIView):
         employee = get_object_or_404(models.Employee, id=employee_id)
         serializer = serializers.EmployeeSerializer(employee)
         return Response(serializer.data)
+
+
+class EventsAPIView(APIView):
+
+    @extend_schema(
+        summary="Events",
+        request=None,
+        responses=PaginationDynamicResponseSerializer(child_serializer_class=serializers.EventsSerializer),
+        parameters=[
+            OpenApiParameter(name='page', required=True, type=OpenApiTypes.INT),
+            OpenApiParameter(name='limit', required=True, type=OpenApiTypes.INT),
+        ]
+    )
+    def get(self, request):
+        page = request.query_params.get('page')
+        limit = request.query_params.get('limit')
+        events = models.Event.objects.all().order_by('-date')
+        return paginate_dynamic(events, serializers.EventsSerializer, request, page, limit)
+
+
+class EventAPIView(APIView):
+
+    @extend_schema(
+        summary="Event by id",
+        request=None,
+        responses=serializers.EventSerializer(),
+        operation_id='retrieve_event'
+    )
+    def get(self, request, event_id: int):
+        event = get_object_or_404(models.Event, id=event_id)
+        serializer = serializers.EventSerializer(event)
+        return Response(serializer.data)

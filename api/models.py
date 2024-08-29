@@ -80,9 +80,35 @@ class Employee(models.Model):
         upload_to='students/',
         verbose_name="Rasm"
     )
-    description = models.TextField(default='')
+    description = models.TextField(
+        verbose_name="Ma'lumot",
+        default=''
+    )
 
     class Meta:
         verbose_name_plural = "4.Xodimlar"
+
+
+class Event(models.Model):
+    title = models.CharField(
+        max_length=150,
+        verbose_name="Sarlavha"
+    )
+    description = models.TextField(
+        verbose_name="Ma'lumot",
+        default=''
+    )
+    photo = models.ImageField(
+        upload_to='events/',
+        verbose_name="Rasm"
+    )
+    date = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Vaqt"
+    )
+
+    class Meta:
+        verbose_name_plural = "5.Tadbirlar"
+
 
 
