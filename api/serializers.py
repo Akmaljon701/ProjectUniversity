@@ -101,7 +101,7 @@ class EventsSerializer(ModelSerializer):
     description = SerializerMethodField()
 
     class Meta:
-        model = models.New
+        model = models.Event
         fields = [
             'id',
             'title',
@@ -121,7 +121,41 @@ class EventsSerializer(ModelSerializer):
 class EventSerializer(ModelSerializer):
 
     class Meta:
-        model = models.New
+        model = models.Event
+        fields = [
+            'id',
+            'title',
+            'description',
+            'photo',
+            'date',
+        ]
+
+
+class GuestLecturesSerializer(ModelSerializer):
+    description = SerializerMethodField()
+
+    class Meta:
+        model = models.GuestLecture
+        fields = [
+            'id',
+            'title',
+            'description',
+            'photo',
+            'date',
+        ]
+
+    @extend_schema_field(str)
+    def get_description(self, obj) -> Optional[str]:
+        description = obj.description
+        if len(description) > 30:
+            return description[:30] + '...'
+        return description
+
+
+class GuestLectureSerializer(ModelSerializer):
+
+    class Meta:
+        model = models.GuestLecture
         fields = [
             'id',
             'title',

@@ -60,3 +60,12 @@ class EventAdmin(ModelAdmin):
 
 
 admin.site.register(models.Event, EventAdmin)
+
+
+class GuestLectureAdmin(ModelAdmin):
+    list_display = ['id', 'title', 'date',]
+    list_display_links = ['title', 'date',]
+    search_fields = ['title',]
+
+
+admin.site.register(models.GuestLecture, GuestLectureAdmin)

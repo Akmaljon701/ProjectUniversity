@@ -141,3 +141,35 @@ class EventAPIView(APIView):
         event = get_object_or_404(models.Event, id=event_id)
         serializer = serializers.EventSerializer(event)
         return Response(serializer.data)
+
+
+class GuestLecturesAPIView(APIView):
+
+    @extend_schema(
+        summary="GuestLectures",
+        request=None,
+        responses=PaginationDynamicResponseSerializer(child_serializer_class=serializers.GuestLecturesSerializer),
+        parameters=[
+            OpenApiParameter(name='page', required=True, type=OpenApiTypes.INT),
+            OpenApiParameter(name='limit', required=True, type=OpenApiTypes.INT),
+        ]
+    )
+    def get(self, request):
+        page = request.query_params.get('page')
+        limit = request.query_params.get('limit')
+        guest_lectures = models.GuestLecture.objects.all().order_by('-date')
+        return paginate_dynamic(guest_lectures, serializers.GuestLecturesSerializer, request, page, limit)
+
+
+class GuestLectureAPIView(APIView):
+
+    @extend_schema(
+        summary="GuestLecture by id",
+        request=None,
+        responses=serializers.GuestLectureSerializer(),
+        operation_id='retrieve_event'
+    )
+    def get(self, request, guest_lecture_id: int):
+        guest_lecture = get_object_or_404(models.GuestLecture, id=guest_lecture_id)
+        serializer = serializers.GuestLectureSerializer(guest_lecture)
+        return Response(serializer.data)

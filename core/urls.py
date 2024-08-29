@@ -21,4 +21,7 @@ urlpatterns = [
 
     path('events/', views.EventsAPIView.as_view()),
     path('events/<int:event_id>/', views.EventAPIView.as_view()),
+
+    path('guest_lectures/', views.GuestLecturesAPIView.as_view()),
+    path('guest_lectures/<int:guest_lecture_id>/', views.GuestLectureAPIView.as_view()),
 ]

@@ -109,6 +109,28 @@ class Event(models.Model):
 
     class Meta:
         verbose_name_plural = "5.Tadbirlar"
+        
+
+class GuestLecture(models.Model):
+    title = models.CharField(
+        max_length=150,
+        verbose_name="Sarlavha"
+    )
+    description = models.TextField(
+        verbose_name="Ma'lumot",
+        default=''
+    )
+    photo = models.ImageField(
+        upload_to='events/',
+        verbose_name="Rasm"
+    )
+    date = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Vaqt"
+    )
+
+    class Meta:
+        verbose_name_plural = "6.Mehmon ma'ruzalari"
 
 
 
